@@ -12,6 +12,10 @@ import 'package:pockettask/view/utils/theme/theme_controller.dart';
 
 
 
+
+
+
+
 //flutter test test/pocket_task_test_cases.dart
 //flutter test
 
@@ -27,17 +31,22 @@ void main() {
     TestWidgetsFlutterBinding.ensureInitialized();
 
     // Mock path provider for Hive
-    const MethodChannel('plugins.flutter.io/path_provider')
-    .setMockMethodCallHandler((MethodCall methodCall) async {
-      print('Mocking call: ${methodCall.method}');
-      switch (methodCall.method) {
-        case 'getApplicationDocumentsDirectory':
-        case 'getTemporaryDirectory':
-        return '.';
+    //const MethodChannel('plugins.flutter.io/path_provider');
+
+    TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger.setMockMethodCallHandler(
+      MethodChannel('plugins.flutter.io/path_provider'), 
+      (MethodCall methodCall) async{
+        print('Mocking call: ${methodCall.method}');
+        switch (methodCall.method) {
+          case 'getApplicationDocumentsDirectory':
+          case 'getTemporaryDirectory':
+          return '.';
         default:
-        return null;
+          return null;
+        }
       }
-    });
+    );
+
 
 
     // Initialize Hive
